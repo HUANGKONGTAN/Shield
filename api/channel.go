@@ -23,11 +23,14 @@ func NewChannel(c *gin.Context) {
 
 // 查询所有频道
 func Channels(c *gin.Context) {
+
+	Type := c.Query("type")
+
 	var code int
 	var total int64
 	var data [] *model.Channel
 
-	data, code, total = model.ListChannels()
+	data, code, total = model.ListChannels(Type)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

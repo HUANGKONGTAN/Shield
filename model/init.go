@@ -20,7 +20,7 @@ func InitDB()(err error) {
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 
-	_ = db.AutoMigrate(&User{}, &Article{}, &Channel{})
+	_ = db.AutoMigrate(&User{}, &Article{}, &Channel{}, &Photo{}, &Music{}, &Sundry{})
 
 	if err == nil {
 		log.Println("connect db success")

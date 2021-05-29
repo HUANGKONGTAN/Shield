@@ -1,11 +1,14 @@
 package model
 
-import "Shield/tool"
+import (
+	"Shield/tool"
+)
 
 type Channel struct {
 	BaseModel
 	Name string
 	Describe string
+	Type int
 }
 
 // 新增频道
@@ -30,11 +33,17 @@ func UpdateChannel(id int, channel *Channel) int {
 	return tool.SUCCSE
 }
 
-func ListChannels() ([]*Channel, int, int64) {
+func ListChannels(Type string) ([]*Channel, int, int64) {
 	var channels []*Channel
 	var total int64
 
-	err := DB.Find(&channels).Error
+	var TypeCode int
+	if Type == "article" {
+		TypeCode = 0
+	}else if Type == "sundry" {
+		TypeCode = 1
+	}
+	err := DB.Where("type = ? ", TypeCode).Find(&channels).Error
 	DB.Model(&channels).Count(&total)
 	if err != nil {
 		return nil, tool.ERROR, 0

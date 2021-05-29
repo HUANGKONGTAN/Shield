@@ -2,7 +2,6 @@ package model
 
 import (
 	"Shield/tool"
-	"fmt"
 )
 
 type Photo struct {
@@ -13,7 +12,6 @@ type Photo struct {
 
 // 新增文章
 func InsertPhoto(data *Photo) int {
-	fmt.Print(data)
 	err := DB.Create(&data).Error
 	if err != nil {
 		return tool.ERROR
@@ -57,7 +55,7 @@ func DeletePhoto(id int) int {
 
 func GiftPhoto() (Photo,  int) {
 	var gift Photo
-	err := DB.Model(&Photo{}).Select("ID, Title").Scan(&gift).Error
+	err := DB.Last(&Photo{}).Select("title, file_name").Scan(&gift).Error
 	if err != nil {
 		return gift, tool.ERROR
 	}

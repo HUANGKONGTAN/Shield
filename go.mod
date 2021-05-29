@@ -9,5 +9,3 @@ require (
 	gorm.io/driver/mysql v1.0.5
 	gorm.io/gorm v1.21.4
 )
-
-replace github.com/Unknwon/com => github.com/unknwon/com v0.0.0-20190804042917-757f69c95f3e

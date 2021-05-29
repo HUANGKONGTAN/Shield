@@ -30,6 +30,9 @@ func InitRouter() {
 		articleRoute.PUT("", api.UpdateArticle)
 		articleRoute.DELETE("", api.DeleteArticle)
 		articleRoute.GET("gift", api.GiftArticle)
+		articleRoute.GET("search", api.FindArticle)
+		articleRoute.GET("like", api.LikeArticle)
+		articleRoute.GET("read", api.ReadArticle)
 	}
 
 	//文章列表
@@ -61,6 +64,56 @@ func InitRouter() {
 	channelsRoute := r.Group("api/channels")
 	{
 		channelsRoute.GET("", api.Channels)
+	}
+
+	//音乐API
+	musicRoute := r.Group("api/music")
+	{
+		musicRoute.GET("", api.Music)
+		musicRoute.POST("", api.NewMusic)
+		musicRoute.DELETE("", api.DeleteMusic)
+		musicRoute.GET("gift", api.GiftMusic)
+		//musicRoute.GET("search", api.FindMusic)
+	}
+
+	//音乐列表API
+	musicsRoute := r.Group("api/musics")
+	{
+		musicsRoute.GET("", api.Musics)
+	}
+
+	//杂项API
+	sundryRoute := r.Group("api/sundry")
+	{
+		sundryRoute.GET("", api.Sundry)
+		sundryRoute.POST("", api.NewSundry)
+		sundryRoute.DELETE("", api.DeleteSundry)
+		sundryRoute.PUT("", api.UpdateSundry)
+		sundryRoute.GET("gift", api.GiftSundry)
+		sundryRoute.GET("search", api.FindSundry)
+		sundryRoute.GET("like", api.LikeSundry)
+		sundryRoute.GET("read", api.ReadSundry)
+	}
+
+	//杂项列表API
+	sundriesRoute := r.Group("api/sundries")
+	{
+		sundriesRoute.GET("", api.Sundries)
+	}
+
+	//影相API
+	photoRoute := r.Group("api/photo")
+	{
+		photoRoute.GET("", api.Photo)
+		photoRoute.POST("", api.NewPhoto)
+		photoRoute.DELETE("", api.DeletePhoto)
+		photoRoute.GET("gift", api.GiftPhoto)
+	}
+
+	//杂项列表API
+	photosRoute := r.Group("api/photos")
+	{
+		photosRoute.GET("", api.Photos)
 	}
 
 

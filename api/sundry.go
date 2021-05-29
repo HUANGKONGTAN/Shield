@@ -10,10 +10,10 @@ import (
 	"strconv"
 )
 
-func NewArticle(c *gin.Context) {
-	var data model.Article
+func NewSundry(c *gin.Context) {
+	var data model.Sundry
 	_ = c.ShouldBindJSON(&data)
-	code := model.InsertArticle(&data)
+	code := model.InsertSundry(&data)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
@@ -22,20 +22,20 @@ func NewArticle(c *gin.Context) {
 }
 
 // 查询所有文章
-func Articles(c *gin.Context) {
+func Sundries(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
 	pageNum, _ := strconv.Atoi(c.Query("pageNumber"))
 
 	var code int
 	var total int64
-	var data [] *viewModel.ViewArticle
+	var data [] *viewModel.ViewSundry
 
 	id, _ := c.GetQuery("channelId")
 	if id == "" {
-		data, code, total = model.ListArticles(pageSize, pageNum)
+		data, code, total = model.ListSundries(pageSize, pageNum)
 	}else {
 		channelId, _ := strconv.Atoi(id)
-		data, code, total = model.ListArticlesByChannel(channelId, pageSize, pageNum)
+		data, code, total = model.ListSundriesByChannel(channelId, pageSize, pageNum)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -46,9 +46,9 @@ func Articles(c *gin.Context) {
 }
 
 // 查询单个文章信息
-func Article(c *gin.Context) {
+func Sundry(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Query("id"))
-	data, code := model.ArticleByID(id)
+	data, code := model.SundryByID(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -58,16 +58,11 @@ func Article(c *gin.Context) {
 }
 
 // 更新文章
-func UpdateArticle(c *gin.Context) {
-	var data model.Article
-	//id, _ := strconv.Atoi(c.PostForm("id"))
-
-	//title := c.PostForm("title")
-	//fmt.Print(id)
-	//fmt.Println(title)
+func UpdateSundry(c *gin.Context) {
+	var data model.Sundry
 	_ = c.ShouldBindJSON(&data)
 
-	code := model.UpdateArticle(&data)
+	code := model.UpdateSundry(&data)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -76,9 +71,10 @@ func UpdateArticle(c *gin.Context) {
 }
 
 // DeleteArt 删除文章
-func DeleteArticle(c *gin.Context) {
+func DeleteSundry(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Query("id"))
-	code := model.DeleteArticle(id)
+	fmt.Print(id)
+	code := model.DeleteSundry(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -87,8 +83,8 @@ func DeleteArticle(c *gin.Context) {
 }
 
 // 获取推送文章
-func GiftArticle(c *gin.Context) {
-	gift, code := model.GiftArticle()
+func GiftSundry(c *gin.Context) {
+	gift, code := model.GiftSundry()
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": gift,
@@ -98,22 +94,22 @@ func GiftArticle(c *gin.Context) {
 }
 
 // 搜索文章
-func FindArticle(c *gin.Context) {
+func FindSundry(c *gin.Context) {
 	keyWord := c.Query("keyWord")
-	articles, code := model.FindArticle(keyWord)
+	sundries, code := model.FindSundry(keyWord)
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": articles,
+		"data": sundries,
 		"status":  code,
 		"message": tool.GetErrMsg(code),
 	})
 }
 
-func LikeArticle(c *gin.Context) {
+func LikeSundry(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Query("id"))
 
 	fmt.Println(id)
-	code := model.LikeArticle(id)
+	code := model.LikeSundry(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -121,13 +117,12 @@ func LikeArticle(c *gin.Context) {
 	})
 }
 
-func ReadArticle(c *gin.Context) {
+func ReadSundry(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Query("id"))
-	code := model.ReadArticle(id)
+	code := model.ReadSundry(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": tool.GetErrMsg(code),
 	})
 }
-
