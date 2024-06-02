@@ -10,9 +10,9 @@ import (
 
 func main() {
 	type User struct {
-		ID           uint
-		Username         string
-		Password     string
+		ID       uint
+		Username string
+		Password string
 	}
 
 	dsn := "root:@tcp(127.0.0.1:3306)/shield?charset=utf8mb4&parseTime=True&loc=Local"
@@ -48,5 +48,3 @@ func main() {
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
-
-

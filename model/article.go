@@ -8,11 +8,11 @@ import (
 
 type Article struct {
 	BaseModel
-	Title string `gorm:"index"`
-	Content string `gorm:"type:longtext"`
-	AuthorID int `gorm:"default:4"`
-	ChannelID int `gorm:"default:1"`
-	Published bool
+	Title      string `gorm:"index"`
+	Content    string `gorm:"type:longtext"`
+	AuthorID   int    `gorm:"default:4"`
+	ChannelID  int    `gorm:"default:1"`
+	Published  bool
 	ReadAmount int `gorm:"default:0"`
 	LikeAmount int `gorm:"default:0"`
 }
@@ -44,14 +44,14 @@ func ListArticlesByChannel(id int, pageSize int, pageNumber int) ([]*viewModel.V
 	var articles []*viewModel.ViewArticle
 	var total int64
 
-	err := DB.Model(&Article{}).Select("article.title, " +
-		"article.id, article.content, article.read_amount, " +
-		"article.like_amount, article.created_at, " +
+	err := DB.Model(&Article{}).Select("article.title, "+
+		"article.id, article.content, article.read_amount, "+
+		"article.like_amount, article.created_at, "+
 		"channel.name as channel, user.nick_name as author").
 		Joins("left join channel on article.channel_id = channel.id").
 		Joins("left join user on article.author_id = user.id").
 		Where("channel_id =?", id).
-		Limit(pageSize).Offset((pageNumber-1)*pageSize).Scan(&articles).Error
+		Limit(pageSize).Offset((pageNumber - 1) * pageSize).Scan(&articles).Error
 	DB.Model(&Article{}).Where("channel_id =?", id).Count(&total)
 	if err != nil {
 		return nil, tool.ERROR_CHANNEL_NOT_EXIST, 0
@@ -65,11 +65,11 @@ func ListArticles(pageSize int, pageNum int) ([]*viewModel.ViewArticle, int, int
 
 	err := DB.Model(&Article{}).Select("article.title, " +
 		"article.id, article.read_amount, " +
-		"article.like_amount, article.created_at, " +
-		"channel.name as channel, user.nick_name as author").
-		Joins("left join channel on article.channel_id = channel.id").
+		"article.like_amount, article.created_at "). // +
+		///"channel.name as channel, user.nick_name as author").
+		//Joins("left join channel on article.channel_id = channel.id").
 		Joins("left join user on article.author_id = user.id").
-	Limit(pageSize).Offset((pageNum-1)*pageSize).Scan(&articles).Error
+		Limit(pageSize).Offset((pageNum - 1) * pageSize).Scan(&articles).Error
 	DB.Model(&Article{}).Count(&total)
 	if err != nil {
 		return nil, tool.ERROR, 0
@@ -77,11 +77,11 @@ func ListArticles(pageSize int, pageNum int) ([]*viewModel.ViewArticle, int, int
 	return articles, tool.SUCCSE, total
 }
 
-func ArticleByID(articleID interface{})(*viewModel.ViewArticle, int) {
+func ArticleByID(articleID interface{}) (*viewModel.ViewArticle, int) {
 	var article *viewModel.ViewArticle
-	err := DB.Model(&Article{}).Select("article.title, " +
-		"article.content, article.read_amount, " +
-		"article.like_amount, " +
+	err := DB.Model(&Article{}).Select("article.title, "+
+		"article.content, article.read_amount, "+
+		"article.like_amount, "+
 		"user.nick_name as author").
 		Joins("left join user on article.author_id = user.id").
 		Where("article.id = ?", articleID).First(&article).Error
@@ -100,7 +100,7 @@ func DeleteArticle(id int) int {
 	return tool.SUCCSE
 }
 
-func GiftArticle() (Article,  int) {
+func GiftArticle() (Article, int) {
 
 	var gift Article
 	err := DB.Last(&Article{}).Select("ID, Title").Scan(&gift).Error
@@ -110,11 +110,11 @@ func GiftArticle() (Article,  int) {
 	return gift, tool.SUCCSE
 }
 
-func FindArticle(keyWord string)([]*viewModel.ViewArticle , int){
+func FindArticle(keyWord string) ([]*viewModel.ViewArticle, int) {
 	var articles []*viewModel.ViewArticle
-	err := DB.Model(&Article{}).Select("article.title, " +
-		"article.id, article.read_amount, " +
-		"article.like_amount, article.created_at, " +
+	err := DB.Model(&Article{}).Select("article.title, "+
+		"article.id, article.read_amount, "+
+		"article.like_amount, article.created_at, "+
 		"channel.name as channel, user.nick_name as author").
 		Joins("left join channel on article.channel_id = channel.id").
 		Joins("left join user on article.author_id = user.id").
@@ -125,7 +125,7 @@ func FindArticle(keyWord string)([]*viewModel.ViewArticle , int){
 	return articles, tool.SUCCSE
 }
 
-func LikeArticle (id int) (int) {
+func LikeArticle(id int) int {
 	var article Article
 	DB.Model(&Article{}).Select("like_amount").
 		Where("id =  ? ", id).First(&article)
@@ -137,8 +137,7 @@ func LikeArticle (id int) (int) {
 	return tool.SUCCSE
 }
 
-
-func ReadArticle (id int) (int) {
+func ReadArticle(id int) int {
 	var article Article
 	DB.Model(&Article{}).Select("read_amount").
 		Where("id =  ? ", id).First(&article)
